@@ -194,30 +194,6 @@ jobs:
             echo //registry.npmjs.org/:_authToken=$(npmToken) >> packages/fluentui/.npmrc
 
       - task: CmdLine@2
-        displayName: Display new version
-        inputs:
-          script: >-
-            if [[ "$(tag)" == "latest" ]]
-
-            then
-              if [[ "$(version)" == "minor" ]]
-              then
-                RELEASE_COMMAND="yarn release:fluentui:minor"
-              elif [[ "$(version)" == "patch" ]]
-              then
-                RELEASE_COMMAND="yarn release:fluentui:patch"
-              fi
-
-            else
-              RELEASE_COMMAND="yarn release:fluentui:custom $(version) --dist-tag $(tag)"
-            fi
-
-
-            echo "##vso[task.setvariable variable=RELEASE_COMMAND]$RELEASE_COMMAND"
-
-            printf 'n\n' | eval "$RELEASE_COMMAND"
-
-      - task: CmdLine@2
         displayName: Stop before publish
         timeoutInMinutes: 2
         inputs:
