@@ -113,7 +113,6 @@ jobs:
               fi
             fi
 
-
             echo "##vso[task.setvariable variable=RELEASE_COMMAND]$RELEASE_COMMAND"
 
             printf 'n\n' | eval "$RELEASE_COMMAND"

@@ -6,54 +6,48 @@ import { EOL } from 'os';
 
 import { findGitRoot } from '../monorepo/index';
 
-const lernaPublishPatchArgs = [
-  'lerna',
-  'publish',
-  "--tag-version-prefix='@fluentui/react-northstar_v'", // HEADS UP: also see yarn stats:save in azure-pipelines.perf-test.yml
-  '--no-git-reset',
-  '--force-publish',
-  '--registry',
-  argv().registry,
-  'patch',
-];
-
-const lernaPublishMinorArgs = [
-  'lerna',
-  'publish',
-  "--tag-version-prefix='@fluentui/react-northstar_v'", // HEADS UP: also see yarn stats:save in azure-pipelines.perf-test.yml
-  '--no-git-reset',
-  '--force-publish',
-  '--registry',
-  argv().registry,
-  'minor',
-];
-
-const lernaPublishCanaryArgs = [
-  'lerna',
-  'publish',
-  'prerelease',
-  "--tag-version-prefix='@fluentui/react-northstar_v'", // HEADS UP: also see yarn stats:save in azure-pipelines.perf-test.yml
-  '--no-push',
-  '--no-git-tag-version',
-  '--no-git-reset',
-  '--force-publish',
-  '--registry',
-  argv().registry,
-];
-
 export function fluentuiLernaPublish(bumpType, skipConfirm = false, npmTagForCanary = 'beta') {
   const fluentRoot = path.resolve(findGitRoot(), 'packages', 'fluentui');
 
   let lernaPublishArgs;
   switch (bumpType) {
     case 'minor':
-      lernaPublishArgs = lernaPublishMinorArgs;
+      lernaPublishArgs = [
+        'lerna',
+        'publish',
+        "--tag-version-prefix='@fluentui/react-northstar_v'", // HEADS UP: also see yarn stats:save in azure-pipelines.perf-test.yml
+        '--no-git-reset',
+        '--force-publish',
+        '--registry',
+        argv().registry,
+        'minor',
+      ];
       break;
     case 'patch':
-      lernaPublishArgs = lernaPublishPatchArgs;
+      lernaPublishArgs = [
+        'lerna',
+        'publish',
+        "--tag-version-prefix='@fluentui/react-northstar_v'",
+        '--no-git-reset',
+        '--force-publish',
+        '--registry',
+        argv().registry,
+        'patch',
+      ];
       break;
     case 'canary':
-      lernaPublishArgs = lernaPublishCanaryArgs;
+      lernaPublishArgs = [
+        'lerna',
+        'publish',
+        'prerelease',
+        "--tag-version-prefix='@fluentui/react-northstar_v'",
+        '--no-push',
+        '--no-git-tag-version',
+        '--no-git-reset',
+        '--force-publish',
+        '--registry',
+        argv().registry,
+      ];
       lernaPublishArgs.push('--dist-tag', npmTagForCanary, '--preid', npmTagForCanary);
       break;
     default:
