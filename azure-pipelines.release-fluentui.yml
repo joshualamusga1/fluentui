@@ -118,24 +118,25 @@ jobs:
 
             printf 'n\n' | eval "$RELEASE_COMMAND"
 
-  # - job: Job_2
-  #   displayName: Manual Approval
-  #   dependsOn: Job_1
-  #   pool: server
+  - job: Job_2
+    displayName: Manual Approval
+    dependsOn: Job_1
+    pool: server
 
-  #   steps:
-  #     - task: ManualValidation@0
-  #       timeoutInMinutes: 10 # task times out in 10 min
-  #       displayName: Manual Validation
-  #       inputs:
-  #         notifyUsers: $(approvers)
-  #         instructions: Please validate the version in the previous job
+    steps:
+      - task: ManualValidation@0
+        timeoutInMinutes: 10 # task times out in 10 min
+        displayName: Manual Validation
+        inputs:
+          notifyUsers: $(approvers)
+          instructions: Please validate the version in the previous job
+          onTimeout: 'reject'
 
   - job: Job_3
     displayName: Build and Release
     dependsOn:
       - Job_1
-      # - Job_2
+      - Job_2
     condition: and(succeeded(), eq(variables.publishToNPM, true))
     pool:
       name: Self Host Ubuntu
@@ -226,7 +227,7 @@ jobs:
     displayName: Publish Docsite
     dependsOn:
       - Job_1
-      # - Job_2
+      - Job_2
       - Job_3
     condition: or(succeeded(), eq(variables.publishDocsite, true))
     pool:
