@@ -26,6 +26,7 @@ variables:
     value: false
   - name: approvers
     value: |
+      lingga@microsoft.com
       yuanboxue@microsoft.com
   - name: dryRun # stop before publish
     value: true
