@@ -200,6 +200,7 @@ jobs:
         inputs:
           script: >-
             echo $RELEASE_COMMAND
+
             if [[ "$(dryRun)" == true ]]
 
             then
