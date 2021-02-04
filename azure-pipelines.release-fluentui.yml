@@ -11,7 +11,7 @@ resources:
 variables:
   - group: 'Github and NPM secrets'
   - name: version
-    value: 0.52.1-beta.1
+    value: canary
   - name: tag
     value: beta
   - name: docsiteVersion
@@ -95,7 +95,6 @@ jobs:
         inputs:
           script: >-
             if [[ "$(tag)" == "latest" ]]
-
             then
               if [[ "$(version)" == "minor" ]]
               then
@@ -106,7 +105,12 @@ jobs:
               fi
 
             else
-              RELEASE_COMMAND="yarn release:fluentui:custom $(version) --dist-tag $(tag)"
+              if [[ "$(version)" == "canary" ]]
+              then
+                RELEASE_COMMAND="yarn release:fluentui:canary --dist-tag $(tag)"
+              else
+                RELEASE_COMMAND="yarn release:fluentui:custom $(version) --dist-tag $(tag)"
+              fi
             fi
 
 

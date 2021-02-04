@@ -110,15 +110,21 @@ export function preset() {
     const skipConfirm = args['yes'];
     fluentuiLernaCustomPublish(version, tag, skipConfirm);
   });
+  task('fluentui:publish:minor', () => {
+    const args = getJustArgv();
+    const skipConfirm = args['yes'];
+    fluentuiLernaPublish('minor', skipConfirm);
+  });
   task('fluentui:publish:patch', () => {
     const args = getJustArgv();
     const skipConfirm = args['yes'];
     fluentuiLernaPublish('patch', skipConfirm);
   });
-  task('fluentui:publish:minor', () => {
+  task('fluentui:publish:canary', () => {
     const args = getJustArgv();
     const skipConfirm = args['yes'];
-    fluentuiLernaPublish('minor', skipConfirm);
+    const tag = args['dist-tag'];
+    fluentuiLernaPublish('canary', skipConfirm, tag);
   });
 
   task('fluentui:publish:validation', fluentuiPostPublishValidation());

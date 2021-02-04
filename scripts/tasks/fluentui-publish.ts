@@ -6,20 +6,61 @@ import { EOL } from 'os';
 
 import { findGitRoot } from '../monorepo/index';
 
-export function fluentuiLernaPublish(bumpType, skipConfirm = false) {
-  fluentuiUpdateChangelog(bumpType);
+const lernaPublishPatchArgs = [
+  'lerna',
+  'publish',
+  "--tag-version-prefix='@fluentui/react-northstar_v'", // HEADS UP: also see yarn stats:save in azure-pipelines.perf-test.yml
+  '--no-git-reset',
+  '--force-publish',
+  '--registry',
+  argv().registry,
+  'patch',
+];
 
+const lernaPublishMinorArgs = [
+  'lerna',
+  'publish',
+  "--tag-version-prefix='@fluentui/react-northstar_v'", // HEADS UP: also see yarn stats:save in azure-pipelines.perf-test.yml
+  '--no-git-reset',
+  '--force-publish',
+  '--registry',
+  argv().registry,
+  'minor',
+];
+
+const lernaPublishCanaryArgs = [
+  'lerna',
+  'publish',
+  'prerelease',
+  "--tag-version-prefix='@fluentui/react-northstar_v'", // HEADS UP: also see yarn stats:save in azure-pipelines.perf-test.yml
+  '--no-push',
+  '--no-git-tag-version',
+  '--no-git-reset',
+  '--force-publish',
+  '--registry',
+  argv().registry,
+];
+
+export function fluentuiLernaPublish(bumpType, skipConfirm = false, npmTagForCanary = 'beta') {
   const fluentRoot = path.resolve(findGitRoot(), 'packages', 'fluentui');
-  const lernaPublishArgs = [
-    'lerna',
-    'publish',
-    "--tag-version-prefix='@fluentui/react-northstar_v'", // HEADS UP: also see yarn stats:save in azure-pipelines.perf-test.yml
-    '--no-git-reset',
-    '--force-publish',
-    '--registry',
-    argv().registry,
-    bumpType,
-  ];
+
+  let lernaPublishArgs;
+  switch (bumpType) {
+    case 'minor':
+      lernaPublishArgs = lernaPublishMinorArgs;
+      break;
+    case 'patch':
+      lernaPublishArgs = lernaPublishPatchArgs;
+      break;
+    case 'canary':
+      lernaPublishArgs = lernaPublishCanaryArgs;
+      lernaPublishArgs.push('--dist-tag', npmTagForCanary, '--preid', npmTagForCanary);
+      break;
+    default:
+      throw new Error(`lerna publish gets invalid bump type ${bumpType}`);
+      break;
+  }
+
   if (skipConfirm) {
     lernaPublishArgs.push('--yes');
   }
