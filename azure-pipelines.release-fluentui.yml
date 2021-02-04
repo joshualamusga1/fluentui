@@ -95,6 +95,7 @@ jobs:
         inputs:
           script: >-
             if [[ "$(tag)" == "latest" ]]
+
             then
               if [[ "$(version)" == "minor" ]]
               then
