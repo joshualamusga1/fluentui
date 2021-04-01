@@ -68,6 +68,14 @@ export class DetailsColumnBase extends React.Component<IDetailsColumnProps> {
     const classNames = this._classNames;
     const IconComponent = useFastIcons ? FontIcon : Icon;
 
+    const defaultOnRenderHeader = (): JSX.Element | null => {
+      if (column.isIconOnly) {
+        return <span className={classNames.accessibleLabel}>{column.name}</span>;
+      }
+
+      return <>{column.name}</>;
+    };
+
     return (
       <>
         <div
@@ -129,11 +137,8 @@ export class DetailsColumnBase extends React.Component<IDetailsColumnProps> {
                       <IconComponent className={classNames.iconClassName} iconName={column.iconName} />
                     )}
 
-                    {column.isIconOnly ? (
-                      <span className={classNames.accessibleLabel}>{column.name}</span>
-                    ) : (
-                      column.name
-                    )}
+                    {column.onRenderHeader && column.onRenderHeader(this.props, defaultOnRenderHeader)}
+                    {!column.onRenderHeader && defaultOnRenderHeader()}
                   </span>
 
                   {column.isFiltered && <IconComponent className={classNames.nearIcon} iconName="Filter" />}

@@ -2914,6 +2914,7 @@ export interface IColumn {
     data?: any;
     fieldName?: string;
     filterAriaLabel?: string;
+    flexGrow?: number;
     getValueKey?: (item?: any, index?: number, column?: IColumn) => string;
     groupAriaLabel?: string;
     headerClassName?: string;
@@ -2941,9 +2942,11 @@ export interface IColumn {
     onColumnResize?: (width?: number) => void;
     onRender?: (item?: any, index?: number, column?: IColumn) => any;
     onRenderDivider?: IRenderFunction<IDetailsColumnProps>;
+    onRenderHeader?: IRenderFunction<IDetailsColumnProps>;
     sortAscendingAriaLabel?: string;
     sortDescendingAriaLabel?: string;
     styles?: IStyleFunctionOrObject<IDetailsColumnStyleProps, IDetailsColumnStyles>;
+    targetWidthProportion?: number;
 }
 
 // @public (undocumented)
@@ -3789,6 +3792,7 @@ export interface IDetailsListProps extends IBaseProps<IDetailsList>, IWithViewpo
     dragDropEvents?: IDragDropEvents;
     enableUpdateAnimations?: boolean;
     enterModalSelectionOnTouch?: boolean;
+    flexMargin?: number;
     getCellValueKey?: (item?: any, index?: number, column?: IColumn) => string;
     getGroupHeight?: IGroupedListProps['getGroupHeight'];
     getKey?: (item: any, index?: number) => string;
